@@ -1,0 +1,10 @@
+.container { max-width: 1100px; }
+.topbar { display: flex; justify-content: space-between; align-items: center; }
+.login { max-width: 320px; margin: 6rem auto; display: grid; gap: .75rem; font-family: system-ui, sans-serif; }
+.login input, .filters input, .filters select { padding: .45rem; }
+.filters { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: 1rem 0; }
+.filters fieldset { border: 1px solid #ddd; border-radius: 6px; }
+.filters fieldset label { margin-right: .6rem; font-size: .85rem; }
+th.sortable { cursor: pointer; user-select: none; }
+.pager { display: flex; gap: 1rem; justify-content: center; align-items: center; margin: 1rem 0; }
+.muted { color: #777; text-align: center; }
