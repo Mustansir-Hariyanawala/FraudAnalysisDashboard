@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###Newly Added###
+.env
+data/
+*.mv.db

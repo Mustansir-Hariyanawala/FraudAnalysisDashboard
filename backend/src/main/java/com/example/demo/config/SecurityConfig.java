@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,22 +18,25 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    @Value ("${spring.h2.console.enabled:false}") private boolean h2Console;
+    @Value ("${app.cors.allowed-origins}") private List<String> allowedOrigins;
+    
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults())
-            // see note on CSRF below
             .csrf(csrf -> csrf.disable())
-            .headers(h -> h.frameOptions(f -> f.sameOrigin()))
+            .headers(h -> { if (h2Console) h.frameOptions(f -> f.sameOrigin()); })
             .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
             .logout(l -> l.logoutUrl("/api/auth/logout")
-                          .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
-            .authorizeHttpRequests(a -> a
-                .requestMatchers("/error").permitAll()
-                .requestMatchers("/h2-console/**").permitAll()          // DEV ONLY: remove in production
-                .requestMatchers("/api/auth/login").permitAll()
-                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/**").hasAnyRole("ANALYST", "ADMIN")
-                .anyRequest().authenticated());
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
+            .authorizeHttpRequests(a -> {
+                a.requestMatchers("/error", "/actuator/health/**").permitAll();
+                if (h2Console) a.requestMatchers("/h2-console/**").permitAll();
+                a.requestMatchers("/api/auth/login").permitAll();
+                a.requestMatchers("/api/admin/**").hasRole("ADMIN");
+                a.requestMatchers("/api/**").hasAnyRole("ANALYST", "ADMIN");
+                a.anyRequest().authenticated();
+            });
         return http.build();
     }
 
@@ -46,7 +50,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of("http://localhost:5173"));
+        cfg.setAllowedOrigins(allowedOrigins);
         cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         cfg.setAllowedHeaders(List.of("*"));
         cfg.setAllowCredentials(true);                       // needed so the session cookie is sent
@@ -54,4 +58,5 @@ public class SecurityConfig {
         src.registerCorsConfiguration("/api/**", cfg);
         return src;
     }
+
 }
