@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
-
+import { fmtDateTime } from "./format";
 const EMPTY = { username: "", fullName: "", email: "", password: "", role: "ANALYST" };
 
 export default function StaffAdmin() {
@@ -46,7 +46,7 @@ export default function StaffAdmin() {
           {staff.map((s) => (
             <tr key={s.id}>
               <td>{s.username}</td><td>{s.fullName}</td><td>{s.email}</td><td>{s.role}</td>
-              <td>{s.lastLoginAt ? new Date(s.lastLoginAt).toLocaleString("en-IN") : "—"}</td>
+              <td>{s.lastLoginAt ? fmtDateTime(t.createdAt) : "—"}</td>
               <td><button onClick={() => toggle(s)}>{s.enabled ? "Disable" : "Enable"}</button></td>
             </tr>
           ))}

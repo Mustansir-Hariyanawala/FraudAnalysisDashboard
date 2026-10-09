@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "./api";
+import { fmtDateTime } from "./format";
 
 const formatINR = (n) => {
   n = Number(n || 0);
@@ -133,7 +134,7 @@ function TransactionDrawer({ transaction, onClose }) {
             <h3>Transaction</h3>
             <div className="detail-grid">
               <div><span className="detail-label">Amount</span><strong>{formatINR(transaction.amount)}</strong></div>
-              <div><span className="detail-label">Date & time</span><strong>{new Date(transaction.createdAt).toLocaleString("en-IN")}</strong></div>
+              <div><span className="detail-label">Date & time</span><strong>{fmtDateTime(t.createdAt)}</strong></div>
               <div><span className="detail-label">Location</span><strong>{transaction.location || "—"}</strong></div>
               <div><span className="detail-label">Country</span><strong>{transaction.country || "—"}</strong></div>
               <div><span className="detail-label">Merchant</span><strong>{transaction.merchant || "—"}</strong></div>
@@ -336,7 +337,7 @@ export default function Dashboard() {
                     <td>{formatINR(t.amount)}</td>
                     <td><span className={`risk ${t.riskLevel}`}>{t.riskScore}</span></td>
                     <td><span className={`status ${t.status}`}>{t.status}</span></td>
-                    <td>{new Date(t.createdAt).toLocaleString("en-IN")}</td>
+                    <td>{fmtDateTime(t.createdAt)}</td>
                     <td><button className="view-button" onClick={() => viewTransaction(t.id)}>View</button></td>
                   </tr>
                 ))}
