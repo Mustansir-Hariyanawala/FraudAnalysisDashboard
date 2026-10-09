@@ -46,7 +46,7 @@ export default function StaffAdmin() {
           {staff.map((s) => (
             <tr key={s.id}>
               <td>{s.username}</td><td>{s.fullName}</td><td>{s.email}</td><td>{s.role}</td>
-              <td>{s.lastLoginAt ? fmtDateTime(t.createdAt) : "—"}</td>
+              <td>{s.lastLoginAt ? fmtDateTime(s.createdAt) : "—"}</td>
               <td><button onClick={() => toggle(s)}>{s.enabled ? "Disable" : "Enable"}</button></td>
             </tr>
           ))}

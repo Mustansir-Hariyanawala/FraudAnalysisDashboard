@@ -134,7 +134,7 @@ function TransactionDrawer({ transaction, onClose }) {
             <h3>Transaction</h3>
             <div className="detail-grid">
               <div><span className="detail-label">Amount</span><strong>{formatINR(transaction.amount)}</strong></div>
-              <div><span className="detail-label">Date & time</span><strong>{fmtDateTime(t.createdAt)}</strong></div>
+              <div><span className="detail-label">Date & time</span><strong>{fmtDateTime(transaction.createdAt)}</strong></div>
               <div><span className="detail-label">Location</span><strong>{transaction.location || "—"}</strong></div>
               <div><span className="detail-label">Country</span><strong>{transaction.country || "—"}</strong></div>
               <div><span className="detail-label">Merchant</span><strong>{transaction.merchant || "—"}</strong></div>
